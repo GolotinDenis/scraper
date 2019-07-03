@@ -1,10 +1,28 @@
 <!DOCTYPE html>
 <html>
+
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
 <body>
-
-<h1>My First Heading</h1>
-
-<p>My first paragraph.</p>
-
+    <div class="container">
+        <h2>Cars <small>from nydailynews.com</small></h2>
+        <ul class="responsive-table">
+            <li class="table-header">
+                <div class="col col-1">Job Id</div>
+                <div class="col col-2">Customer Name</div>
+                <div class="col col-9">Amount Due</div>
+            </li>
+             {% for row in data %}
+            <li class="table-row">
+                <div class="col col-1" data-label="Job Id">{{ row.year }}</div>
+                <div class="col col-2" data-label="Customer Name">{{row.name}}</div>
+                <div class="col col-9" data-label="Amount">{{row.desciption}}</div>
+            </li>
+             {% endfor %}
+        </ul>
+    </div>
 </body>
+
 </html>

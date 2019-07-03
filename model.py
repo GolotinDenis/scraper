@@ -10,7 +10,7 @@ class CRUD():
 class Car(db.Model, CRUD):
     id = Column(Integer, primary_key=True)
     year = Column(Integer)
-    name = Column(Text)
+    name = Column(Text, unique=True)
     desciption = Column(Text)
     def  __repr__(self):
         return '<Car %r>' % self.name
