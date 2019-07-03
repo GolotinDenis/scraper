@@ -1,0 +1,5 @@
+env/
+migrations/
+.vscode/
+__pycache__/
+password.txt
