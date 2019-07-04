@@ -3,3 +3,4 @@ Flask-SQLAlchemy
 beautifulsoup4
 requests
 mysqlclient
+Flask-Migrate
