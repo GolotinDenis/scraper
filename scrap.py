@@ -62,3 +62,9 @@ def getData():
             'desciption': car.desciption
         })
     return jsonify(response)
+
+@app.route('/list_data/<model>')
+def listData(model):
+    user = request.query_string
+    print(model, user)
+    return model;
