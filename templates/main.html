@@ -25,8 +25,8 @@
         </ul>
     </div>
     <div class="action">
-        <button onclick="getTruck()" >next</button>
-        <button>prev</button>
+        <button onclick="navigateToPage(-1, 'page')">prev</button>
+        <button onclick="navigateToPage(1, 'page')">next</button>
     </div>
     <div class="container truck">
         <h2>Truck <small>from nydailynews.com</small></h2>
@@ -42,6 +42,10 @@
             </li>
             {% endfor %}
         </ul>
+    </div>
+    <div class="action">
+        <button onclick="navigateToPage(-1, 'pageTruck')">prev</button>
+        <button onclick="navigateToPage(1, 'pageTruck')">next</button>
     </div>
     <script src="{{url_for('static', filename='js/main.js')}}"></script>
 </body>

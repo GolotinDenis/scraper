@@ -20,6 +20,8 @@ db.create_all()
 sites = ('https://www.nydailynews.com/autos/types/sports-car',
          'http://www.nydailynews.com/autos/types/truck')
 
+limit = 5;
+
 # Get cars info from sites
 @app.route('/scrap_sites')
 def scrap_sites():
@@ -39,17 +41,20 @@ def scrap_sites():
 # get main page
 @app.route('/')
 def main_page():
+    page = int(request.args.get('page') or 0);
+    pageTruck = int(request.args.get('pageTruck') or 0);
+    print(page, pageTruck);
     super_car = [{
         'name': car.name,
         'year': car.year,
         'desciption': car.desciption
-    } for car in Car.query.filter_by(model='sports-car')]
+    } for car in Car.query.filter_by(model='sports-car').limit(limit).offset(page*limit)]
 
     truck = [{
         'name': car.name,
         'year': car.year,
         'desciption': car.desciption
-    } for car in Car.query.filter_by(model='truck')]
+    } for car in Car.query.filter_by(model='truck').limit(limit).offset(pageTruck*limit)]
 
     return render_template('main.html', super_car=super_car, truck=truck)
 
