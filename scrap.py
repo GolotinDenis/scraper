@@ -1,64 +1,72 @@
+
+import requests
 from bs4 import BeautifulSoup
-from flask import Flask, render_template, jsonify, request, jsonify
+
+from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-import requests
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://UoDHDfsk3r:GXBANIHkYx@remotemysql.com:3306/UoDHDfsk3r'
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+
 from model import Car
+
+migrate = Migrate(app, db)
 db.create_all()
 
-sites = ('https://www.nydailynews.com/autos/types/sports-car', 'http://www.nydailynews.com/autos/types/truck')
-@app.route('/scrap')
-def scrapSite():
+
+sites = ('https://www.nydailynews.com/autos/types/sports-car',
+         'http://www.nydailynews.com/autos/types/truck')
+
+# Get cars info from sites
+@app.route('/scrap_sites')
+def scrap_sites():
     Car.query.delete()
-    for site in sites:
-        response = requests.get(site).text
-        scrap = BeautifulSoup(response,  features = 'html.parser')
-        carsArray =scrap.find('div', {'class':'rtww'}).findChildren('a',recursive=False)
-        for cars in carsArray:
-            car = Car( year=cars['data-attribute-year'], 
-            name=cars.findChild('h3').text.replace(cars['data-attribute-year'],''), 
-            desciption=cars.findChild('p',{'class':'description'}).text,
-            model = site.split('/')[-1])
-            car.save()
-    return 'Success';
 
+    for car, site in car_cilce():
+        carModel = Car()
+        carModel.year = car['data-attribute-year']
+        carModel.name = car.findChild('h3').text
+        carModel.desciption = car.findChild('p', {'class': 'description'}).text
+        carModel.model = site
+        carModel.save()
+
+    return 'Success'
+
+
+# get main page
 @app.route('/')
-def mainPage():
-    superCar = []
-    truck = []
-    for car in Car.query.filter_by(model='sports-car').all():
-        superCar.append({
-            'name': car.name,
-            'year': car.year,
-            'desciption': car.desciption
-        })
-    for car in Car.query.filter_by(model='truck').all():
-        truck.append({
-            'name': car.name,
-            'year': car.year,
-            'desciption': car.desciption
-        })
-    return render_template('main.html', superCar = superCar, truck = truck)
+def main_page():
+    super_car = [{
+        'name': car.name,
+        'year': car.year,
+        'desciption': car.desciption
+    } for car in Car.query.filter_by(model='sports-car')]
 
-@app.route('/_add_numbers')
-def add_numbers():
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b)
+    truck = [{
+        'name': car.name,
+        'year': car.year,
+        'desciption': car.desciption
+    } for car in Car.query.filter_by(model='truck')]
 
-@app.route('/get_data')
-def getData():
-    response = []
-    for car in Car.query.all():
-        response.append({
-            'name': car.name,
-            'year': car.year,
-            'desciption': car.desciption
-        })
-    return jsonify(response)
+    return render_template('main.html', super_car=super_car, truck=truck)
+
+
+# generator for sites
+def get_site():
+    for site in sites:
+        try:
+            response = requests.get(site).text
+            scrap = BeautifulSoup(response,  features='html.parser')
+            yield scrap.find('div', {'class': 'rtww'}).findChildren('a', recursive=False), site.split('/')[-1]
+        except (KeyError, TypeError):
+            print('An error occurred while trying to parse the site.')
+
+
+# generator for cars what was found at sites
+def car_cilce():
+    for cars, site in get_site():
+        for car in cars:
+            yield car, site
