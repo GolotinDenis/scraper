@@ -12,5 +12,5 @@ In terminal
 
 ### End Point
 
-http://localhost:5000/ - main page
+http://localhost:5000/ - main page;
 http://localhost:5000/scrap_sites - clear database and re-scrape www.nydailynews.com
