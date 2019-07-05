@@ -1,16 +1,11 @@
 # Scraper cars
 
-### Install
-
-`$ pip install -r requirements.txt`
-
 #### Run
 In terminal
 
-    ➜ export FLASK_APP = scrap.py
-    ➜ flask run
+    ➜ sudo docker-compose up -d
 
 ### End Point
 
 http://localhost:5000/ - main page;
-http://localhost:5000/scrap_sites - clear database and re-scrape www.nydailynews.com
+http://localhost:5000/api/scrap_sites - clear database and re-scrape www.nydailynews.com
