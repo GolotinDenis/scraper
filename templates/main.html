@@ -23,11 +23,12 @@
             </li>
             {% endfor %}
         </ul>
-    </div>
-    <div class="action">
+         <div class="action">
         <button onclick="navigateToPage(-1, 'page')">prev</button>
         <button onclick="navigateToPage(1, 'page')">next</button>
     </div>
+    </div>
+   
     <div class="container truck">
         <h2>Truck <small>from nydailynews.com</small></h2>
         <ul class="responsive-table">
@@ -42,11 +43,12 @@
             </li>
             {% endfor %}
         </ul>
-    </div>
-    <div class="action">
+         <div class="action">
         <button onclick="navigateToPage(-1, 'pageTruck')">prev</button>
         <button onclick="navigateToPage(1, 'pageTruck')">next</button>
     </div>
+    </div>
+   
     <script src="{{url_for('static', filename='js/main.js')}}"></script>
 </body>
 

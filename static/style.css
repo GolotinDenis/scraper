@@ -72,3 +72,6 @@ h2 small {
     text-align: right;
   }
 }
+.action {
+  float: right;
+}

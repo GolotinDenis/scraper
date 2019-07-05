@@ -1,14 +1,34 @@
 $(document).ready(function () {
+    total = {};
+    getParamFromQuery('page');
+    getParamFromQuery('pageTruck');
     pageObj = {
-        page: getParamFromQuery('page'),
-        pageTruck: getParamFromQuery('pageTruck')
-    }
+        page: null,
+        pageTruck: null
+    }    
+    
+    
 });
-let pageObj = {
-   
+async function getParamFromQuery(name) {
+    let params = document.location.href.split('?')[1];
+    let qury = new URLSearchParams(params);
+    let param = parseInt(qury.get(name));
+    total = await $.ajax({
+        url: '/count',
+        method: 'GET'
+    })
+    console.log(total)
+    getParamFromQuery[name] = isNaN(param) ? '' : param > total[name] ? total[name] : param;
+}
+function navigateToPage(icrement, name) {
+    if (pageObj[name] + icrement < 0) {
+        return;
+    }
+    pageObj[name] = pageObj[name] + icrement;
+
+    setUrl(pageObj);
 }
 
-let total = 10;
 function setUrl(param) {
     let clearUrl = document.location.href.split('?')[0];
     page = param.page;
@@ -23,18 +43,4 @@ function setUrl(param) {
     if (document.location.href !== newUrl) {
         document.location.href = newUrl;
     }
-}
-function navigateToPage(icrement, name) {
-    if(pageObj[name] + icrement<0) {
-        return;
-    }
-    pageObj[name] = pageObj[name] + icrement;
-
-    setUrl(pageObj);
-}
-function getParamFromQuery(name) {
-    let params = document.location.href.split('?')[1];
-    let qury = new URLSearchParams(params);
-    let param = parseInt(qury.get(name));
-    return isNaN(param) ? '' : param > total ? total : param;
 }
