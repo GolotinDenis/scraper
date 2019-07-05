@@ -1,14 +1,22 @@
 import math
+import os
 import requests
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
 from flask import Flask, render_template, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 
+basedir = os.path.abspath(os.path.dirname(__file__))
+load_dotenv(os.path.join(basedir, '.env'))
+
+DB_NAME = os.environ.get('DB_NAME')
+LIMIT = 5;
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://UoDHDfsk3r:GXBANIHkYx@remotemysql.com:3306/UoDHDfsk3r'
+app.config['SQLALCHEMY_DATABASE_URI'] = DB_NAME
 db = SQLAlchemy(app)
 
 from model import Car
@@ -19,8 +27,6 @@ db.create_all()
 
 sites = ('https://www.nydailynews.com/autos/types/sports-car',
          'http://www.nydailynews.com/autos/types/truck')
-
-LIMIT = 5;
 
 # Get cars info from sites
 @app.route('/api/scrap_sites')

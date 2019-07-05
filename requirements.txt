@@ -4,3 +4,4 @@ beautifulsoup4
 requests
 mysqlclient
 Flask-Migrate
+python-dotenv

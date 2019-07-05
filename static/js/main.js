@@ -8,8 +8,8 @@ getParamFromQuery('page_truck');
    
 async function getParamFromQuery(name) {
     const params = document.location.href.split('?')[1];
-    const qury = new URLSearchParams(params);
-    const param = parseInt(qury.get(name));
+    const  query = new URLSearchParams(params);
+    const param = parseInt( query.get(name));
     total = await $.ajax({
         url: '/api/count',
         method: 'GET'
