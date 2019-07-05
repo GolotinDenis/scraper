@@ -1,24 +1,22 @@
-$(document).ready(function () {
-    total = {};
-    getParamFromQuery('page');
-    getParamFromQuery('pageTruck');
-    pageObj = {
-        page: null,
-        pageTruck: null
-    }    
-    
-    
-});
+let total = {};
+let pageObj = {
+    page: null,
+    page_truck: null
+};
+getParamFromQuery('page');
+getParamFromQuery('page_truck');
+   
 async function getParamFromQuery(name) {
-    let params = document.location.href.split('?')[1];
-    let qury = new URLSearchParams(params);
-    let param = parseInt(qury.get(name));
+    const params = document.location.href.split('?')[1];
+    const qury = new URLSearchParams(params);
+    const param = parseInt(qury.get(name));
     total = await $.ajax({
         url: '/api/count',
         method: 'GET'
     })
     pageObj[name] = isNaN(param) ? '' : param > total[name] ? total[name] : param;
 }
+
 function navigateToPage(icrement, name) {
     if (pageObj[name] + icrement < 0) {
         return;
@@ -29,16 +27,16 @@ function navigateToPage(icrement, name) {
 }
 
 function setUrl(param) {
-    let clearUrl = document.location.href.split('?')[0];
+    const clearUrl = document.location.href.split('?')[0];
     page = param.page;
-    pageTruck = param.pageTruck;
+    pageTruck = param.page_truck;
     let newUrl = clearUrl;
     
     if (page || pageTruck) {
-        newUrl = newUrl + '?' + (page ? `page=${page}` : `pageTruck=${pageTruck}`);
+        newUrl = newUrl + '?' + (page ? `page=${page}` : `page_truck=${pageTruck}`);
     }
     if (page && pageTruck) {
-        newUrl = `${newUrl}&pageTruck=${pageTruck}`
+        newUrl = `${newUrl}&page_truck=${pageTruck}`
     }
     if (document.location.href !== newUrl) {
         document.location.href = newUrl;

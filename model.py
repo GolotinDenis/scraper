@@ -1,4 +1,3 @@
-
 from sqlalchemy import Column, Integer, Text
 
 from scrap import db
@@ -11,6 +10,7 @@ class Car(db.Model):
     desciption = Column(Text)
     model = Column(Text)
     price = Column(Text)
+
     def save(self):
          if self.id == None:
              db.session.add(self)
