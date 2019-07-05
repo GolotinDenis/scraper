@@ -1,4 +1,4 @@
-
+import math
 import requests
 from bs4 import BeautifulSoup
 
@@ -37,6 +37,14 @@ def scrap_sites():
 
     return 'Success'
 
+# get number of cars in DB
+@app.route('/count')
+def count():
+    countResult = {
+        'page':  math.ceil(Car.query.filter_by(model='sports-car').count() / limit)-1,
+        'pageTruck': math.ceil(Car.query.filter_by(model='truck').count()  / limit)-1
+    }
+    return jsonify(countResult)
 
 # get main page
 @app.route('/')

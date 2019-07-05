@@ -17,14 +17,13 @@ async function getParamFromQuery(name) {
         url: '/count',
         method: 'GET'
     })
-    console.log(total)
-    getParamFromQuery[name] = isNaN(param) ? '' : param > total[name] ? total[name] : param;
+    pageObj[name] = isNaN(param) ? '' : param > total[name] ? total[name] : param;
 }
 function navigateToPage(icrement, name) {
     if (pageObj[name] + icrement < 0) {
         return;
     }
-    pageObj[name] = pageObj[name] + icrement;
+    pageObj[name] = pageObj[name] + icrement > total[name] ? total[name] : pageObj[name] + icrement;
 
     setUrl(pageObj);
 }
@@ -34,6 +33,7 @@ function setUrl(param) {
     page = param.page;
     pageTruck = param.pageTruck;
     let newUrl = clearUrl;
+    
     if (page || pageTruck) {
         newUrl = newUrl + '?' + (page ? `page=${page}` : `pageTruck=${pageTruck}`);
     }
