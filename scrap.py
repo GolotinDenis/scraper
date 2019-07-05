@@ -12,7 +12,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 load_dotenv(os.path.join(basedir, '.env'))
 
 DB_NAME = os.environ.get('DB_NAME')
-LIMIT = 5;
+PAGE_SIZE = 5;
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -38,14 +38,12 @@ def scrap_sites():
         carPage = car['href']
         page = requests.get(car['href']).text
         price = BeautifulSoup(page,  features='html.parser').find('div', {'class': 'ra-price'})
+
         car_model.year = car['data-attribute-year']
         car_model.name = car.findChild('h3').text
         car_model.desciption = car.findChild('p', {'class': 'description'}).text
         car_model.model = site
-        if hasattr(price,'text'):
-            car_model.price = price.text
-        else:
-            car_model.price = None
+        car_model.price = price.text if hasattr(price,'text') else None
         car_model.save()
 
     return 'Success'
@@ -53,11 +51,10 @@ def scrap_sites():
 # get number of cars in DB
 @app.route('/api/count')
 def count():
-    countResult = {
-        'page':  math.ceil(Car.query.filter_by(model='sports-car').count() / LIMIT) - 1,
-        'page_truck': math.ceil(Car.query.filter_by(model='truck').count()  / LIMIT) - 1
-    }
-    return jsonify(countResult)
+    return jsonify({
+        'page':  math.ceil(Car.query.filter_by(model='sports-car').count() / PAGE_SIZE) - 1,
+        'page_truck': math.ceil(Car.query.filter_by(model='truck').count()  / PAGE_SIZE) - 1
+    })
 
 # get main page
 @app.route('/')
@@ -69,14 +66,14 @@ def main_page():
         'year': car.year,
         'desciption': car.desciption,
         'price': car.price
-    } for car in Car.query.filter_by(model='sports-car').limit(LIMIT).offset(page*LIMIT)]
+    } for car in Car.query.filter_by(model='sports-car').limit(PAGE_SIZE).offset(page*PAGE_SIZE)]
 
     truck = [{
         'name': car.name,
         'year': car.year,
         'desciption': car.desciption,
         'price': car.price
-    } for car in Car.query.filter_by(model='truck').limit(LIMIT).offset(page_truck*LIMIT)]
+    } for car in Car.query.filter_by(model='truck').limit(PAGE_SIZE).offset(page_truck*PAGE_SIZE)]
 
     return render_template('main.html', super_car=super_car, truck=truck)
 
