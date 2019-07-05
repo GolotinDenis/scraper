@@ -14,7 +14,7 @@ async function getParamFromQuery(name) {
     let qury = new URLSearchParams(params);
     let param = parseInt(qury.get(name));
     total = await $.ajax({
-        url: '/count',
+        url: '/api/count',
         method: 'GET'
     })
     pageObj[name] = isNaN(param) ? '' : param > total[name] ? total[name] : param;

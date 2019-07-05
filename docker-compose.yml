@@ -1,0 +1,10 @@
+version: "3.2"
+services:
+  scrap:
+    build: .
+    working_dir: /scrap
+    command: python wsgi.py run
+    volumes:
+      - .:/scrap
+    ports:
+    - '5000:5000'

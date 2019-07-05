@@ -23,7 +23,7 @@ sites = ('https://www.nydailynews.com/autos/types/sports-car',
 limit = 5;
 
 # Get cars info from sites
-@app.route('/scrap_sites')
+@app.route('/api/scrap_sites')
 def scrap_sites():
     Car.query.delete()
 
@@ -45,7 +45,7 @@ def scrap_sites():
     return 'Success'
 
 # get number of cars in DB
-@app.route('/count')
+@app.route('/api/count')
 def count():
     countResult = {
         'page':  math.ceil(Car.query.filter_by(model='sports-car').count() / limit)-1,
