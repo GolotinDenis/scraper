@@ -10,7 +10,7 @@ class Car(db.Model):
     name = Column(Text)
     desciption = Column(Text)
     model = Column(Text)
-
+    price = Column(Text)
     def save(self):
          if self.id == None:
              db.session.add(self)

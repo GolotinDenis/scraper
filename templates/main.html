@@ -15,11 +15,13 @@
             <li class="table-header">
                 <div class="col col-3">Title</div>
                 <div class="col col-9">Description</div>
+                <div class="col col-2">Price</div>
             </li>
             {% for row in super_car %}
             <li class="table-row">
-                <div class="col col-3" data-label="Job Id">{{row.name}}</div>
-                <div class="col col-9" data-label="Amount">{{row.desciption}}</div>
+                <div class="col col-3" >{{row.name}}</div>
+                <div class="col col-9" >{{row.desciption}}</div>
+                <div class="col col-2">{{row.price or ''}}</div>
             </li>
             {% endfor %}
         </ul>
@@ -35,11 +37,13 @@
             <li class="table-header">
                 <div class="col col-3">Title</div>
                 <div class="col col-9">Description</div>
+                <div class="col col-2">Price</div>
             </li>
             {% for row in truck %}
             <li class="table-row">
-                <div class="col col-3" data-label="Job Id">{{row.name}}</div>
-                <div class="col col-9" data-label="Amount">{{row.desciption}}</div>
+                <div class="col col-3" >{{row.name}}</div>
+                <div class="col col-9" >{{row.desciption}}</div>
+                <div class="col col-2">{{row.price or ''}}</div>
             </li>
             {% endfor %}
         </ul>

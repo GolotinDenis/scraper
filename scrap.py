@@ -29,10 +29,17 @@ def scrap_sites():
 
     for car, site in car_cilce():
         carModel = Car()
+        carPage = car['href']
+        page = requests.get(car['href']).text
+        price = BeautifulSoup(page,  features='html.parser').find('div', {'class': 'ra-price'})
         carModel.year = car['data-attribute-year']
         carModel.name = car.findChild('h3').text
         carModel.desciption = car.findChild('p', {'class': 'description'}).text
         carModel.model = site
+        if hasattr(price,'text'):
+            carModel.price = price.text
+        else:
+            carModel.price = None
         carModel.save()
 
     return 'Success'
@@ -55,13 +62,15 @@ def main_page():
     super_car = [{
         'name': car.name,
         'year': car.year,
-        'desciption': car.desciption
+        'desciption': car.desciption,
+        'price': car.price
     } for car in Car.query.filter_by(model='sports-car').limit(limit).offset(page*limit)]
 
     truck = [{
         'name': car.name,
         'year': car.year,
-        'desciption': car.desciption
+        'desciption': car.desciption,
+        'price': car.price
     } for car in Car.query.filter_by(model='truck').limit(limit).offset(pageTruck*limit)]
 
     return render_template('main.html', super_car=super_car, truck=truck)
